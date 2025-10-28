@@ -25,8 +25,8 @@ const MyCategories = ({ navigation }) => {
         </View>
 
         <View style={styles.tagsContainer}>
-          {categories.map((tag) => (
-            <TagsComponent key={tag.name} change={true} tag={tag} navigation={navigation} selected={tag.name} />
+          {categories.map((tag,index) => (
+            <TagsComponent key={index} change={true} tag={tag} navigation={navigation} selected={tag.name} index={index}/>
           ))}
         </View>
 

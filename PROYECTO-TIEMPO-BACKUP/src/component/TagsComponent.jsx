@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 
-const TagsComponent = ({ navigation, change = false, active =false,  tag,selected=null}) => {
+const TagsComponent = ({ navigation, change = false, active =false,  tag,selected=null, index}) => {
     return (
         <View style={styles.container}>
            
@@ -16,7 +16,7 @@ const TagsComponent = ({ navigation, change = false, active =false,  tag,selecte
                     <Text style={[styles.name,{color:"#fff"}]}>{tag.name}</Text>
                 </TouchableOpacity>
             :
-                <TouchableOpacity style={styles.nameContent} onPress={()=> {!selected ? navigation.navigate(tag.router) :  navigation.navigate(tag.router,{selected})}}>
+                <TouchableOpacity style={styles.nameContent} onPress={()=> {!selected ? navigation.navigate(tag.router) :  navigation.navigate(tag.router,{selected,index})}}>
                     <Text style={[styles.name,{color:"#000"}]}>{tag.name}</Text>
                 </TouchableOpacity>
             }
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     name: {
         fontSize: 18,
         fontWeight: "600",
-        textAlign:"center"
+        textAlign:"left"
     },
     iconsContent: {
         flexDirection: "row",

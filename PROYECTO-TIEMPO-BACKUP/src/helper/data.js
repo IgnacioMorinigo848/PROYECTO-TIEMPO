@@ -2,22 +2,46 @@ const categories = [
   {
     image: require("../assets/Categories/social-networks.png"),
     name: "Tomarse un break",
-    router:"Timer"
+    router:"Timer",
+    maxPhaseTime:600,
+    minPhaseTime:100,
+    counterTime:0,
+    phaseInTime:1,
+    phase:3,
+    progress:30,
   },
   {
     image: require("../assets/Categories/mobile.png"),
     name: "Mobile",
-    router:"Timer"
+    router:"Timer",
+    maxPhaseTime:600,
+    minPhaseTime:100,
+    counterTime:0,
+    phaseInTime:1,
+    phase:3,
+    progress:30,
   },
   {
     image: require("../assets/Categories/stroll.png"),
     name: "Ir a caminar",
-    router:"Timer"
+    router:"Timer",
+    maxPhaseTime:600,
+    minPhaseTime:100,
+    counterTime:0,
+    phaseInTime:1,
+    phase:3,
+    progress:30,
   },
   {
     image: require("../assets/Categories/dinner.png"),
     name: "Almuerzo/Café",
-    router:"Timer"
+    router:"Timer",
+    maxPhaseTime:600,
+    minPhaseTime:100,
+    counterTime:0,
+    phaseInTime:1,
+    phase:3,
+    progress:30,
   }
 ];
 
@@ -67,7 +91,7 @@ const profile = {
   
 };
 
-const awards =[
+const awards = [
   { 
     description:"+1 día de vacaciones",
     points:20.000,
@@ -142,6 +166,13 @@ const credentials = {
   credential:"11492291",
   mail:"ignaciomorinigo848@gmail.com",
   password:"12345678"
-}
+};
 
-module.exports = {weeklyAssigment,categories,record,profile,awards,alerts,credentials}
+const emote = {
+  happy:require("../assets/Emote/happy.png"),
+  exhausted:require("../assets/Emote/exhausted.png"),
+  noWords:require("../assets/Emote/noWords.png"),
+  unsure:require("../assets/Emote/unsure.png")
+};
+
+module.exports = {weeklyAssigment,categories,record,profile,awards,alerts,credentials,emote}

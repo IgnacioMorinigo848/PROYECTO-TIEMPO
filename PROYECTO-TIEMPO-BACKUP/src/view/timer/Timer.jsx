@@ -7,9 +7,9 @@ import { categories } from "../../helper/data";
 import HeaderComponent from "../../component/HeaderComponent";
 
 const Timer = ({ navigation, route }) => {
-  const { selected } = route.params;
+  const { selected,index } = route.params;
 
-  console.log(selected)
+  console.log(index)
 
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(selected);

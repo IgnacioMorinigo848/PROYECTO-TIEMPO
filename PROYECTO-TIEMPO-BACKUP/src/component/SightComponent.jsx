@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     width: "90%",
     maxHeight: "34%",
     paddingVertical: 20,
-    marginTop:100,
+    marginTop:150,
     alignItems: "center",
     shadowColor: "#000",
     shadowOpacity: 0.2,
