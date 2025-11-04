@@ -6,17 +6,17 @@ import {
   Text,
   ScrollView,
   Image,
-  Dimensions
+  Dimensions,
+  TouchableOpacity
 } from "react-native";
 
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import HeaderComponent from "../component/HeaderComponent";
 import TagsAssigmentComonent from "../component/TagsAssigmentComponent";
-import { emote, profile,weeklyAssigment } from "../helper/data";
+import { emote, profile,weeklyAssigment,moods,infoProgress } from "../helper/data";
 import TagsWeeklyProgress from "../component/TagsWeeklyProgress";
 import SightComponent from "../component/SightComponent";
-import EmoteComponent from "../component/Emotecomponent";
 import ChatBotComponent from "../component/ChatBotComponent";
 
 const { height } = Dimensions.get("window");
@@ -25,6 +25,7 @@ const Home = ({ navigation }) => {
 const [visible,setVisible] = useState(false);
 const [modalVisible, setModalVisible] = useState(false);
 const [currentEmote, setCurrentEmote] = useState(emote.happy);
+const [selectedMood, setSelectedMood] = useState(null);
 
   const handleEmotionChange = (emotion) => {
     switch (emotion) {
@@ -49,10 +50,6 @@ const [currentEmote, setCurrentEmote] = useState(emote.happy);
     setVisible(!visible);
   }
 
-  const visibleChatBot = () =>{
-    setVisibleEmote(!visibleEmote)
-  }
-
   return (
     <SafeAreaView style={styles.safeArea}>
       <ImageBackground
@@ -67,17 +64,52 @@ const [currentEmote, setCurrentEmote] = useState(emote.happy);
 
         <View style={styles.titleContainer}><Text style={styles.title} > {new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' }).replace(',', '')}</Text></View>
 
-        <View style={styles.profileContent}>
-          <Text style={styles.name}>{profile.name}</Text>
-          <View style={styles.pointsContainer}>
-            <View style={styles.imageContent}>
-              <Image style={styles.image} source={profile.image}/>
-            </View>
-            <View style={styles.pointsContent}>
-              <Text style={styles.text}>Tus puntos de salud son</Text>
-              <Text style={styles.points}>{profile.points}</Text>
+        <View style={styles.boxContainer}>
+
+          <View style={styles.profileContent}>
+            <Text style={styles.name}>{profile.name}</Text>
+            <View style={styles.pointsContainer}>
+              <View style={styles.imageContent}>
+                <Image style={styles.image} source={profile.image}/>
+              </View>
+              <View style={styles.pointsContent}>
+                <Text style={styles.text}>Tus puntos de salud son</Text>
+                <Text style={styles.points}>{profile.points}</Text>
+              </View>
             </View>
           </View>
+
+          <TouchableOpacity style={styles.emoteContet} onPress={() => setModalVisible(!modalVisible)}>
+            <Text style={styles.emoteTitle}>¿Necesitas ayuda?</Text>
+            <View style={styles.emoteInfoContent}>
+              <View style={styles.emoteImageContent}>
+                <Image style={styles.emoteImage} source={currentEmote}/>
+              </View>
+              <Text style={styles.emoteText}>Hablá con Blu</Text>
+            </View>
+          </TouchableOpacity>
+
+        </View>
+
+        <View style={styles.moodContainer}>
+      <Text style={styles.moodTitle}>{selectedMood ? `Hoy estas ${moods[selectedMood].label}` : `¿Como te sentís hoy?`}</Text>
+
+      <View style={styles.moodContent}>
+        {moods.map((mood, index) => (
+          <TouchableOpacity
+            key={index}
+            style={[
+              styles.moodItem,
+            ]}
+            onPress={() => setSelectedMood(index)}
+          >
+            <View style={styles.emojiContent}>
+            <Image style={[styles.emoji,selectedMood === index && { tintColor: mood.color, opacity: 1 }]} source={mood.emoji}/>
+            </View>
+            <Text style={styles.label}>{mood.label}</Text>
+          </TouchableOpacity>
+        ))}
+      </View>
         </View>
 
         <View style={styles.assigmentTitleCentent}><Text style={styles.assigmentTitle}>Completa tus hábitos diarios 🙌</Text></View>
@@ -88,30 +120,24 @@ const [currentEmote, setCurrentEmote] = useState(emote.happy);
           contentContainerStyle={styles.contentContainerStyle}
         >
         {weeklyAssigment.map((tag,index) => (
-           <TagsAssigmentComonent navigation={navigation} tag={tag} index={index} key={tag.assigment}/>
+           <TagsAssigmentComonent navigation={navigation} tag={tag} index={index} key={index}/>
           ))}
 
         </ScrollView>
-        
-         <View style={{width:"90%",justifyContent:"flex-start",marginVertical:20}}><Text style={{fontSize:20,color:"#002055",fontWeight:"bold"}}>Tu progreso semanal</Text></View>
 
         <ScrollView
-          contentContainerStyle={styles.contentContainerTagsWeekly}
+          style={{ width: "90%", alignSelf: "center" }}
         >
-         {weeklyAssigment.map((tag,index) => (
-           <TagsWeeklyProgress navigation={navigation} tag={tag} key={tag.assigment}/>
+         {infoProgress.map((tag,index) => (
+           <TagsWeeklyProgress navigation={navigation} tag={tag} key={index}/>
           ))}
 
         </ScrollView>
         <SightComponent visible={visible} onClose={() => setVisible(false)} />
       <View style={{marginTop:30}}>
-        <EmoteComponent
-          onPress={() => setModalVisible(!modalVisible)}
-          emoteImage={currentEmote}
-        />
+        
       </View>
 
-      {/* Modal del chatbot */}
       <ChatBotComponent
         visible={modalVisible}
         onClose={() => setModalVisible(false)}
@@ -145,20 +171,65 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: "bold",
   },
-  profileContent:{
+  moodContainer: {
     width:"90%",
-    height:"auto",
-    alignItems:"center",
-    justifyContent:"center",
-    padding: 15,
-    marginTop:30,
-    backgroundColor:"#fff",
-    borderRadius:8,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.15,
+    backgroundColor:"#F5F8FE",
+    padding: 5,
+    marginVertical:20,
+    borderRadius: 12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.40,
     shadowRadius: 4,
-    elevation: 4,
+    elevation: 5,
+  },
+  moodTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    textAlign:"center"
+  },
+  moodContent: {
+    width: "100%",
+    flexDirection: 'row',
+    justifyContent: "space-between",
+    flexWrap: "wrap",
+  },
+  moodItem: {
+    width: "18%",
+    marginTop:20,
+    marginBottom:5,   
+    alignItems: 'center',
+    borderRadius: 12,
+    opacity: 0.8,
+  },
+  emojiContent:{
+    width:30,
+    height:30
+  },
+  emoji: {
+    width:"100%",
+    height:"100%"
+  },
+  label: {
+    fontSize: 12,
+  },
+  boxContainer:{
+    width:"90%",
+    flexDirection:"row",
+    justifyContent:"space-between",
+    marginTop:30,
+    gap:10
+  },
+  profileContent:{
+    width:"55%",
+    backgroundColor:"#fff",
+    borderRadius:12,
+    padding:16,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 6,
+    elevation: 6,
   },
   name:{
     fontSize:18,
@@ -168,9 +239,8 @@ const styles = StyleSheet.create({
   pointsContainer:{
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "flex-start",
-    width: "100%",
-    gap:40
+    marginTop: 10,
+    gap: 10
   },
   imageContent:{
     width:80,
@@ -181,43 +251,88 @@ const styles = StyleSheet.create({
     height:"100%"
   },
   pointsContent:{
-    justifyContent:"flex-start"
+    justifyContent:"center",
+    alignItems:"flex-start",
+    flexShrink: 1 
   },
   text:{
-    fontSize:16,
-    fontWeight:"bold",
-    color:"#002055"
+    fontSize:14,
+    fontWeight:"500",
+    color:"#002055",
+    flexWrap: "wrap", 
   },
   points:{
-    fontSize:16,
+    fontSize:18,
     fontWeight:"bold",
-    color:"#1AA92E"
+    color:"#D84BBB"
+  },
+  emoteContet:{
+    width:"40%",
+    backgroundColor:"#fff",
+    borderRadius:12,
+    padding:16,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 6,
+    elevation: 6,
+  },
+  emoteTitle:{
+    fontSize:16,
+    textAlign:"center",
+    fontWeight:"bold",
+    color:"#002055",
+    flexWrap: "wrap", 
+  },
+  emoteInfoContent:{
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-start",
+  },
+  emoteImageContent:{
+    width:60,
+    height:60,
+    padding:4,   
+    backgroundColor: "#3E73C3",
+    borderRadius: 60,
+    justifyContent: "center",
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
+    elevation: 5,
+},
+ emoteImage:{
+  width: 40,     
+  height: 40,
+  resizeMode: "contain",
+},
+  emoteText:{
+    fontSize:16,
+    textAlign:"center",
+    color:"#002055",
+    flexShrink: 1 
   },
   assigmentTitleCentent:{
     width: "90%",
     justifyContent: "flex-center",
-    marginVertical:20
+    marginBottom:10
   },
   assigmentTitle:{
     fontSize:25,
     color:"#002055",
     fontWeight:"bold",
     textAlign:"left",
-    width:"60%",
   },
   contentContainerStyle:{
     paddingHorizontal: 20,
     height:height * 0.27,
     gap:10
   },
-  contentContainerTagsWeekly:{
-    width:"90%",
-    height:"auto",
-    paddingBottom:10
-  },
   emote:{
-  marginBottom: 40,
-  position: "relative", 
+    marginBottom: 40,
+    position: "relative", 
   }
 });
 
