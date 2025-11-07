@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet, ScrollView, Dimensions } from "react-native";
+import { View, Text, StyleSheet, ScrollView, Dimensions,TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { BarChart } from "react-native-chart-kit";
 
@@ -61,7 +61,11 @@ export default function Statistics({ navigation }) {
 
         {/* ---- Gráfico de estados de ánimo ---- */}
         <View style={styles.card}>
-          <Text style={styles.title}>Junio 2025</Text>
+          <View style={styles.headerContent}>
+            <TouchableOpacity><Text style={styles.headerItem}>{`<`}</Text></TouchableOpacity>
+            <Text style={styles.headerYear}>Junio 2025</Text>
+            <TouchableOpacity><Text style={styles.headerItem}>{`>`}</Text></TouchableOpacity>
+          </View>
           <BarChart
             data={moodData}
             width={screenWidth - 40}
@@ -82,6 +86,7 @@ export default function Statistics({ navigation }) {
 
         {/* ---- Gráfico horizontal semanal ---- */}
         <View style={styles.card}>
+         
           <Text style={styles.title}>Tu progreso semanal</Text>
           <BarChart
             data={weekData}
@@ -143,6 +148,20 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
+  },
+  headerContent: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+    marginBottom: 10,
+  },
+  headerItem: {
+    fontSize: 20,
+    color: "#000",
+  },
+  headerYear: {
+    fontSize: 18,
+    fontWeight: "600",
   },
   title: {
     fontSize: 18,

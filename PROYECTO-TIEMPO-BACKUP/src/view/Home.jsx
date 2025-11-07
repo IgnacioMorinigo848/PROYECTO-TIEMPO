@@ -13,17 +13,14 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import HeaderComponent from "../component/HeaderComponent";
-import TagsAssigmentComonent from "../component/TagsAssigmentComponent";
-import { emote, profile,weeklyAssigment,moods,infoProgress } from "../helper/data";
+import { emote, profile,moods,infoProgress,weeklyAssigment } from "../helper/data";
 import TagsWeeklyProgress from "../component/TagsWeeklyProgress";
 import SightComponent from "../component/SightComponent";
-import ChatBotComponent from "../component/ChatBotComponent";
 
 const { height } = Dimensions.get("window");
 
 const Home = ({ navigation }) => {
 const [visible,setVisible] = useState(false);
-const [modalVisible, setModalVisible] = useState(false);
 const [currentEmote, setCurrentEmote] = useState(emote.happy);
 const [selectedMood, setSelectedMood] = useState(null);
 
@@ -79,7 +76,7 @@ const [selectedMood, setSelectedMood] = useState(null);
             </View>
           </View>
 
-          <TouchableOpacity style={styles.emoteContet} onPress={() => setModalVisible(!modalVisible)}>
+          <TouchableOpacity style={styles.emoteContet} onPress={() => navigation.navigate("ChatBot")}>
             <Text style={styles.emoteTitle}>¿Necesitas ayuda?</Text>
             <View style={styles.emoteInfoContent}>
               <View style={styles.emoteImageContent}>
@@ -114,22 +111,14 @@ const [selectedMood, setSelectedMood] = useState(null);
 
         <View style={styles.assigmentTitleCentent}><Text style={styles.assigmentTitle}>Completa tus hábitos diarios 🙌</Text></View>
 
-         <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.contentContainerStyle}
-        >
-        {weeklyAssigment.map((tag,index) => (
-           <TagsAssigmentComonent navigation={navigation} tag={tag} index={index} key={index}/>
-          ))}
-
-        </ScrollView>
-
         <ScrollView
           style={{ width: "90%", alignSelf: "center" }}
         >
+          {weeklyAssigment.map((tag,index) => (
+           <TagsWeeklyProgress onPress={()=> navigation.navigate("TimerStack",{screen:"Timer",params:{tag:tag}})} tag={tag} active={true} key={index} />
+          ))}
          {infoProgress.map((tag,index) => (
-           <TagsWeeklyProgress navigation={navigation} tag={tag} key={index}/>
+           <TagsWeeklyProgress onPress={()=> navigation.navigate("HabitStack")} tag={tag} key={index}/>
           ))}
 
         </ScrollView>
@@ -138,11 +127,6 @@ const [selectedMood, setSelectedMood] = useState(null);
         
       </View>
 
-      <ChatBotComponent
-        visible={modalVisible}
-        onClose={() => setModalVisible(false)}
-        onEmotionChange={handleEmotionChange}
-      />
       </ImageBackground>
       
     </SafeAreaView>
